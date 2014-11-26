@@ -24,7 +24,7 @@ int main()
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
-    getaddrinfo("127.0.0.1", "23009", &hints, &res);
+    getaddrinfo("127.0.0.1", "23010", &hints, &res);
     int s = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 
     connect(s, res->ai_addr, res->ai_addrlen);
@@ -33,7 +33,7 @@ int main()
 
     bytes = recv(s, msg, MAXDATASIZE-1, 0);
     cout << bytes << "\n";
-    cout << msg << "\n";
+    cout << string(msg).substr(0,bytes) << "\n";
     fflush(stdout);
     close(s);
 }

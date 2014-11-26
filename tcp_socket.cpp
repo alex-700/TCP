@@ -69,7 +69,7 @@ int tcp_socket::read_data(char *msg, int max_size)
     }
     else
     {
-        throw tcp_exception("read from closed socket");
+        throw tcp_exception("read from closed socket1");
     }
 }
 
@@ -103,7 +103,7 @@ const char * tcp_socket::read_all()
     }
     else
     {
-        throw tcp_exception("read from closed socket");
+        throw tcp_exception("read from closed socket2");
     }
 }
 

@@ -41,14 +41,16 @@ void reverse(tcp_socket* x)
     std::cout << msg << std::endl;
     char * msg2 = new char[bytes];
     for (int i = 0; i < bytes; i++) {
-        msg2[i] = msg2[bytes - 1 - i];
+        msg2[i] = msg[bytes - 1 - i];
     }
 
     x->write_data(msg2, bytes);
-    x->close();
+//    x->close();
     std::cout << bytes << std::endl;
     std::cout << "/" << msg2 << "/" << std::endl;
     fflush(stdout);
+    delete msg;
+    delete msg2;
 }
 
 int main()
@@ -60,6 +62,7 @@ int main()
     sa.sa_sigaction = sig_handler;
 
     sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGTERM, &sa, NULL);
     //sigaction(SIGINT, )
 
 
@@ -68,9 +71,10 @@ int main()
     server->set_new_connection(just);
     server->set_func(reverse);
 
-    server->begin_listening("127.0.0.1", "23009");
+    server->begin_listening("127.0.0.1", "23010");
 
     delete server;
 
+    return 0;
 }
 
