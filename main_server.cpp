@@ -19,7 +19,7 @@ tcp_server* server;
 
 static void sig_handler(int sig, siginfo_t *si, void* unused)
 {
-    cout << "signal" << std::endl;
+    cout << std::endl <<"signal" << std::endl;
     fflush(stdout);
 
     write(server->event_fd, "1", 2);
@@ -52,7 +52,7 @@ int main()
 
     server = new tcp_server();
 
-    server->set_new_connection(reverse);
+    server->set_new_connection(just);
     server->set_func(reverse);
 
     server->begin_listening("127.0.0.1", "23009");

@@ -17,6 +17,7 @@
 #include <sys/eventfd.h>
 #include <errno.h>
 #include <map>
+#include <algorithm>
 #include <functional>
 
 #include "cstdio"
@@ -33,8 +34,10 @@ public:
     ~tcp_server();
     bool begin_listening(char * address, char * service);
     void set_max_pending_connections(int max);
+
     void set_new_connection(void (*f) (tcp_socket*));
     void set_func(void (*f) (tcp_socket*));
+
     int event_fd;
 private:
     bool running;

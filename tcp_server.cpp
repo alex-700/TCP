@@ -41,10 +41,7 @@ bool tcp_server::begin_listening(char* address, char* service)
         if (nfds == -1 && errno == EINTR)
         {
             cout << "stupid exit" << endl;
-
             running = false;
-            close(socket_fd);
-
             break;
         }
 
@@ -65,9 +62,6 @@ bool tcp_server::begin_listening(char* address, char* service)
                 {
                     std::cout << "full";
                     close(connfd);
-                    //close epoll_fd, event_fd, sockets
-
-
                     continue;
                 }
 
@@ -91,6 +85,7 @@ bool tcp_server::begin_listening(char* address, char* service)
                 cout << "YES";
                 fflush(stdout);
                 running = false;
+
                 break;
             } else
             {
@@ -120,12 +115,23 @@ bool tcp_server::begin_listening(char* address, char* service)
                 if (!current_socket->is_open()) {
                     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, current_socket->get_descriptor(), &connev);
                     events_cout--;
-                    sockets.erase(current_socket->get_descriptor());
+                    sockets.erase(sockets.find(current_socket->get_descriptor()));
                 }
             }
         }
 
     }
+    //close epoll_fd, event_fd, sockets
+
+    close(socket_fd);
+    close(epoll_fd);
+    close(event_fd);
+    for (map<int, tcp_socket*>::iterator i = sockets.begin(); i != sockets.end(); i++)
+    {
+       delete i->second;
+    }
+
+
 
 }
 
