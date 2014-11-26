@@ -69,7 +69,7 @@ int tcp_socket::read_data(char *msg, int max_size)
     }
     else
     {
-        throw tcp_exception("read from closed socket1");
+        throw tcp_exception("read from closed socket");
     }
 }
 
@@ -84,7 +84,14 @@ const char * tcp_socket::read_all()
             int x = read_data(msg + size, CHUNK_SIZE);
             if (x != -1)
             {
-                  size += x;
+                if (x == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    size += x;
+                }
             }
             else
             {
@@ -103,7 +110,7 @@ const char * tcp_socket::read_all()
     }
     else
     {
-        throw tcp_exception("read from closed socket2");
+        throw tcp_exception("read from closed socket");
     }
 }
 

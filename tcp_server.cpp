@@ -14,14 +14,13 @@ bool tcp_server::begin_listening(char* address, char* service)
     check_error(epoll_fd, "epoll_fd not created");
 
     create_event_fd();
-    cout << event_fd << std::endl;
-    fflush(stdout);
 
     socket_fd = create_and_bind(address, service);
     check_error(socket_fd, "socket_fd not created");
     check_error(listen(socket_fd, max_pending_connections), "listen");
 
     epoll_event listen_ev;
+    memset(&listen_ev, 0, sizeof listen_ev);
     listen_ev.events = EPOLLIN | EPOLLPRI | EPOLLET;
     listen_ev.data.fd = socket_fd;
     check_error(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, socket_fd, &listen_ev), "epoll_ctl");
@@ -96,8 +95,6 @@ bool tcp_server::begin_listening(char* address, char* service)
                 break;
             } else
             {
-                cout << "bad socket " << events[n].data.fd << std::endl;
-                fflush(stdout);
                 tcp_socket* current_socket = sockets[events[n].data.fd];
 
                 cout << current_socket->is_open() << std::endl;
@@ -154,6 +151,7 @@ int tcp_server::create_and_bind(char* address, char* service)
 {
     struct addrinfo hints, *res;
     memset(&hints, 0, sizeof hints);
+
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
@@ -165,6 +163,8 @@ int tcp_server::create_and_bind(char* address, char* service)
     make_socket_non_blocking(s);
 
     check_error(bind(s, res->ai_addr, res->ai_addrlen), "bind in create and bind");
+    ::free(res);
+
     return s;
 }
 

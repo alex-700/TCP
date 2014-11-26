@@ -13,6 +13,10 @@ using namespace std;
 
 int main()
 {
+    fork();
+    fork();
+    fork();
+
     struct addrinfo hints, *res;
     struct addrinfo* servinfo;
     socklen_t addr_size;
