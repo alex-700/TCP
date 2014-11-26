@@ -35,7 +35,20 @@ void just(tcp_socket* x)
 
 void reverse(tcp_socket* x)
 {
+    const char * msg = x->read_all();
+    int bytes = strlen(msg);
+    std::cout << bytes << std::endl;
+    std::cout << msg << std::endl;
+    char * msg2 = new char[bytes];
+    for (int i = 0; i < bytes; i++) {
+        msg2[i] = msg2[bytes - 1 - i];
+    }
 
+    x->write_data(msg2, bytes);
+    x->close();
+    std::cout << bytes << std::endl;
+    std::cout << "/" << msg2 << "/" << std::endl;
+    fflush(stdout);
 }
 
 int main()

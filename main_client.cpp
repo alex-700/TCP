@@ -32,7 +32,9 @@ int main()
     cout << bytes << "\n";
 
     bytes = recv(s, msg, MAXDATASIZE-1, 0);
-    cout << string(msg).substr(0, bytes) << "\n";
+    cout << bytes << "\n";
+    cout << msg << "\n";
+    fflush(stdout);
     close(s);
 }
 

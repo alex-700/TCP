@@ -8,7 +8,7 @@ tcp_server::~tcp_server() {
 
 bool tcp_server::begin_listening(char* address, char* service)
 {
-    char their_msg[MAX_LENGTH];
+    //char their_msg[MAX_LENGTH];
 
     epoll_fd = epoll_create(MAX_EVENTS);
     check_error(epoll_fd, "epoll_fd not created");
@@ -93,7 +93,7 @@ bool tcp_server::begin_listening(char* address, char* service)
 
                 // function
 
-                int bytes = recv(current_socket->get_descriptor(), their_msg, MAX_LENGTH, 0);
+                /*int bytes = recv(current_socket->get_descriptor(), their_msg, MAX_LENGTH, 0);
                 std::cout << bytes << std::endl;
                 std::cout << their_msg << std::endl;
 
@@ -105,10 +105,9 @@ bool tcp_server::begin_listening(char* address, char* service)
 
                 bytes = send(current_socket->get_descriptor(), their_msg, bytes, 0);
 
-                std::cout << bytes << std::endl;
-
+                std::cout << bytes << std::endl;*/
                 func(current_socket);
-                current_socket->close();
+                //current_socket->close();
 
                 // function
 

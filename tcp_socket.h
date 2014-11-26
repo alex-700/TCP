@@ -25,12 +25,13 @@ public:
     bool is_open() const;
     void make_non_blocking();
 
-    int read_data(const char* msg, int max_size);
+    int read_data(char* msg, int max_size);
     int write_data(const char* msg, int max_size);
-    std::string read_all();
+    const char * read_all();
     void write_all(const char* msg, int size);
 private:
     static const int CHUNK_SIZE = 512;
+    static const int MAX_SIZE = 100000;
     int fd;
     bool open;
 };

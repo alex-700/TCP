@@ -51,14 +51,14 @@ void tcp_socket::make_non_blocking()
     }
 }
 
-int tcp_socket::read_data(const char *msg, int max_size)
+int tcp_socket::read_data(char *msg, int max_size)
 {
     if (is_open())
     {
         int x = recv(fd, msg, max_size, 0);
         if (x == 0)
         {
-            close(fd);
+            ::close(fd);
             open = false;
             return 0;
         }
@@ -73,11 +73,11 @@ int tcp_socket::read_data(const char *msg, int max_size)
     }
 }
 
-std::string tcp_socket::read_all()
+const char * tcp_socket::read_all()
 {
     if (is_open())
     {
-        const char * msg;
+        char * msg = new char[MAX_SIZE];
         int size = 0;
         while (true)
         {
@@ -98,6 +98,8 @@ std::string tcp_socket::read_all()
                 }
             }
         }
+        msg[size] = '\0';
+        return msg;
     }
     else
     {
@@ -109,7 +111,7 @@ int tcp_socket::write_data(const char *msg, int max_size)
 {
     if (is_open())
     {
-        return send(fd, msg, max_size);
+        return send(fd, msg, max_size, 0);
     }
     else
     {
@@ -124,7 +126,7 @@ void tcp_socket::write_all(const char *msg, int size)
         int count = 0;
         while (count < size)
         {
-            count += send(fd, msg + count, CHUNK_SIZE);
+            count += send(fd, msg + count, CHUNK_SIZE, 0);
         }
     }
     else
